@@ -33,14 +33,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        if let index = self.tableView.indexPathForSelectedRow{
+            self.tableView.deselectRow(at: index, animated: false)
+        }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "OverviewToPieDetail" {
+            let destVC = segue.destination as! DetailViewController
+            destVC.pieDetail = sender as? pieCellData
+        }
     }
+    
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -105,14 +110,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect.zero)
-        headerView.backgroundColor = .black
-        let headerLabel = UILabel(frame: CGRect(x: 20, y: 20, width: 50, height: 50))
-        headerLabel.textColor = .white
-        headerView.addSubview(headerLabel)
-      
+        let cell = tableView.dequeueReusableCell(withIdentifier: "OverviewHeaderTableViewCell") as! OverviewHeaderTableViewCell
 
-        return headerView
+        return cell
         
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let pieDetail = pieCells[indexPath.row]
+        performSegue(withIdentifier: "OverviewToPieDetail", sender: pieDetail)
     }
 }

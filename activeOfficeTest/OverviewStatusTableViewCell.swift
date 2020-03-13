@@ -38,6 +38,14 @@ class OverviewStatusTableViewCell: UITableViewCell {
     
     func setupStatusCell(statusCell: statusCellData) {
         
+        // Configure text labels
+        if (statusCell.carbonCost < 50) {
+            carbonCostStatusLabel.textColor = .green
+        }
+        if (statusCell.carbonCost > 49) {
+            carbonCostStatusLabel.textColor = .red
+        }
+        
         // Assign variables
         cellLabel.text = statusCell.cellTitleLabel
         operatingLabel.text = statusCell.operatingModeLabel
